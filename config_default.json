@@ -29,14 +29,14 @@
         "Port": 5432,
         "User": "user",
         "Password": "password",
-        "Database": "mainnet_tzkt_db",
+        "Database": "tzkt_db",
         "Schema": "public",
         "DebugMode": false
       },
       "Auth": {
-        "AuthKey": "3081a40201010430d406bce5f86a1c21915c05dd300ecfefbbdcc42388d081cac6ffb0bca0c23c7c478594872e5b0bbbe8959aa3a6e57cfba00706052b81040022a164036200044c4d707713693ac695a165ee169e55abba2a72f48b72856a8c752f53803ddeeea82eae6d5ef9e2044eea093ed49c7efb4fa5a0338461cc702d1a4c7e04ee1eed21155cee0c0e14de8b33b0d414ebd097e86238ab809af4f24eb3c3d2f23fee77",
-        "SessionHashKey": "b3915822abc0e8daebae8089f0b2d338b581ff6ab16d5e8444449a14a4b222f1",
-        "SessionBlockKey": "6dbfcba83559c9f7133a8d899ed6571c00779856d95bea92fb764d2ecc0ecfe9"
+        "AuthKey": "HexedEcdsaPrivateKey",
+        "SessionHashKey": "Hexed128BitSecretKey",
+        "SessionBlockKey": "Hexed128BitSecretKey"
       },
       "NodeRpc": {
         "Host": "mainnet-tezos.giganode.io:443",
