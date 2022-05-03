@@ -1,0 +1,36 @@
+version: "3.1"
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "root"
+    ports:
+      - 127.0.0.1:5432:5432
+
+  graphql-engine:
+    image: hasura/graphql-engine:v2.2.0
+    ports:
+      - "8080:8080"
+    depends_on:
+    - "db"
+    restart: always
+    environment:
+      ## postgres database to store Hasura metadata
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://tzkt_admin:tzkt_admin@db:5432/tzkt_db
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+    command:
+    - graphql-engine
+    - serve
+
+volumes:
+  postgres:
