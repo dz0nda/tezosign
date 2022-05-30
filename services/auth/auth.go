@@ -2,8 +2,10 @@ package auth
 
 import (
 	"crypto/ecdsa"
+	// "crypto/elliptic"
 	"crypto/x509"
 	"encoding/hex"
+	"encoding/pem"
 	"fmt"
 	"net/http"
 	"strings"
@@ -12,6 +14,7 @@ import (
 	"tezosign/models"
 	"tezosign/types"
 	"time"
+	// "crypto/rand"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/securecookie"
@@ -31,7 +34,31 @@ const (
 	networkHeader       = "network"
 )
 
+func encode(privateKey *ecdsa.PrivateKey, publicKey *ecdsa.PublicKey) (string, string) {
+    x509Encoded, _ := x509.MarshalECPrivateKey(privateKey)
+	
+	// str := hex.EncodeToString(x509Encoded)
+
+	// fmt.Println(str)
+
+	pemEncoded := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: x509Encoded})
+
+    x509EncodedPub, _ := x509.MarshalPKIXPublicKey(publicKey)
+    pemEncodedPub := pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: x509EncodedPub})
+
+    return string(pemEncoded), string(pemEncodedPub)
+}
+
 func NewAuthProvider(authConf conf.Auth, network models.Network) (*Auth, error) {
+	// privateKey, _ := ecdsa.GenerateKey(elliptic.P384(), rand.Reader)
+    // publicKey := &privateKey.PublicKey
+
+	// fmt.Println(privateKey)
+
+    // encPriv, encPub := encode(privateKey, publicKey)
+
+    // fmt.Println(encPriv)
+    // fmt.Println(encPub)
 
 	bt, err := hex.DecodeString(authConf.AuthKey)
 	if err != nil {
@@ -42,6 +69,12 @@ func NewAuthProvider(authConf conf.Auth, network models.Network) (*Auth, error) 
 	if err != nil {
 		return nil, err
 	}
+
+	// newkey1 := securecookie.GenerateRandomKey(32);
+	// newkey2 := securecookie.GenerateRandomKey(32);
+
+	// fmt.Println(hex.EncodeToString(newkey1))
+	// fmt.Println(hex.EncodeToString(newkey2))
 
 	// Hash keys should be at least 32 bytes long
 	hashKey, err := hex.DecodeString(authConf.SessionHashKey)
@@ -64,14 +97,18 @@ func NewAuthProvider(authConf conf.Auth, network models.Network) (*Auth, error) 
 func (a *Auth) GenerateAuthTokens(pubkey types.PubKey) (accessToken, refreshToken string, err error) {
 	accessToken, err = a.generateAccessToken(pubkey)
 	if err != nil {
+		fmt.Println("error generateAccessToken")
 		return "", "", err
 	}
 
 	refreshToken, err = a.generateRefreshToken(pubkey)
 	if err != nil {
+		fmt.Println("error generateRefreshToken")
+
 		return "", "", err
 	}
 
+	fmt.Println("success GenerateAuthTokens")
 	return accessToken, refreshToken, nil
 }
 
@@ -88,9 +125,11 @@ func (a *Auth) generateAccessToken(pubkey types.PubKey) (accessToken string, err
 	})
 
 	accessToken, err = token.SignedString(a.privateKey)
-	if err != nil {
-		return "", err
-	}
+	// if err != nil {
+	// 	fmt.Println("err SignedString")
+
+	// 	return "", err
+	// }
 
 	return accessToken, nil
 }

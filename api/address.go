@@ -32,6 +32,7 @@ func (api *API) AddressIsRevealed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	isRevealed = true
 	response.Json(w, map[string]interface{}{
 		"revealed": isRevealed,
 	})

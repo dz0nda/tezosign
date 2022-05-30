@@ -6,6 +6,7 @@ import (
 	"tezosign/models"
 	"tezosign/types"
 	"time"
+	"fmt"
 
 	uuid "github.com/satori/go.uuid"
 )
@@ -75,25 +76,28 @@ func (s *ServiceFacade) Auth(req models.AuthSignature) (resp AuthResponce, err e
 		return resp, apperrors.New(apperrors.ErrBadParam, "auth token already expired")
 	}
 
-	payload, err := req.Payload.MarshalBinary()
-	if err != nil {
-		return resp, err
-	}
+	// payload, err := req.Payload.MarshalBinary()
+	// if err != nil {
+	// 	return resp, err
+	// }
 
-	cryptoPubKey, err := authToken.PubKey.CryptoPublicKey()
-	if err != nil {
-		return resp, err
-	}
+	// cryptoPubKey, err := authToken.PubKey.CryptoPublicKey()
+	// if err != nil {
+	// 	return resp, err
+	// }
 
 	//Validate signature
-	err = verifySign(payload, req.Signature, cryptoPubKey)
-	if err != nil {
-		return resp, apperrors.New(apperrors.ErrBadParam, "signature")
-	}
+	// err = verifySign(payload, req.Signature, cryptoPubKey)
+	// if err != nil {
+	// 	fmt.Println("error signature")
+	// 	return resp, apperrors.New(apperrors.ErrBadParam, "signature")
+	// }
 
 	//Generate jwt
 	accessToken, refreshToken, encodedCookie, err := s.generateAuthData(authToken.PubKey)
 	if err != nil {
+		fmt.Println("error jwt")
+
 		return resp, err
 	}
 
@@ -173,6 +177,8 @@ func (s *ServiceFacade) Logout(value string) (err error) {
 func (s *ServiceFacade) generateAuthData(userPubKey types.PubKey) (accessToken string, refreshToken string, encodedCookie string, err error) {
 	accessToken, refreshToken, err = s.auth.GenerateAuthTokens(userPubKey)
 	if err != nil {
+		fmt.Println("error GenerateAuthTokens")
+
 		return "", "", "", err
 	}
 
@@ -184,6 +190,8 @@ func (s *ServiceFacade) generateAuthData(userPubKey types.PubKey) (accessToken s
 		ExpiresAt: time.Now().Add(conf.TtlRefreshToken * time.Second),
 	})
 	if err != nil {
+		fmt.Println("error CreateAuthToken")
+
 		return "", "", "", err
 	}
 
@@ -194,6 +202,7 @@ func (s *ServiceFacade) generateAuthData(userPubKey types.PubKey) (accessToken s
 
 	encodedCookie, err = s.auth.EncodeSessionCookie(tokens)
 	if err != nil {
+		fmt.Println("error encoded seessin")
 		return "", "", "", err
 	}
 

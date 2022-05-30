@@ -16,6 +16,10 @@ func ToNetwork(net string) (models.Network, error) {
 		return models.NetworkEdo, nil
 	case "florence", "florencenet":
 		return models.NetworkFlorence, nil
+	case "ithaca", "ithacanet":
+		return models.NetworkIthaca, nil
+	case "jakarta", "jakartanet":
+		return models.NetworkJakarta, nil
 	}
 
 	return "", fmt.Errorf("not supported network")

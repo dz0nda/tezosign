@@ -1,12 +1,12 @@
 DROP DATABASE IF EXISTS tzsign_db;
 
-CREATE USER tzsign_admin PASSWORD 'tzsign_admin';
+CREATE USER tzsign PASSWORD 'qwerty';
 
 CREATE DATABASE tzsign_db;
 
-GRANT ALL PRIVILEGES ON DATABASE tzsign_db TO tzsign_admin;
+GRANT ALL PRIVILEGES ON DATABASE tzsign_db TO tzsign;
 
-\c tzsign_db tzsign_admin;
+\c tzsign_db tzsign;
 
 DROP SCHEMA IF EXISTS msig;
 CREATE SCHEMA msig;

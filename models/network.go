@@ -7,4 +7,6 @@ const (
 	NetworkDelphi   Network = "delphi"
 	NetworkEdo      Network = "edo"
 	NetworkFlorence Network = "florence"
+	NetworkIthaca 	Network = "ithaca"
+	NetworkJakarta 	Network = "jakarta"
 )

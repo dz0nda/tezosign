@@ -633,16 +633,22 @@ func verifySign(message []byte, signature types.Signature, publicKey crypto.Publ
 	var ok bool
 	switch key := publicKey.(type) {
 	case ed25519.PublicKey:
+		fmt.Println("ed25519 pubkey");
+
 		if sigPrefix != tezosprotocol.PrefixEd25519Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
 			return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
 		}
+		fmt.Println(key);
+		fmt.Println(payloadHash[:]);
+		fmt.Println(sigBytes);
+
 		ok = ed25519.Verify(key, payloadHash[:], sigBytes)
 	//P256 curve
 	case ecdsa.PublicKey:
-		//if sigPrefix != tezosprotocol.PrefixP256Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
-		//	log.Print(sigPrefix.PrefixBytes())
-		//	return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
-		//}
+		if sigPrefix != tezosprotocol.PrefixP256Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
+			fmt.Println(sigPrefix.PrefixBytes())
+			return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
+		}
 
 		sig, err := deserializeSig(sigBytes)
 		if err != nil {
@@ -653,6 +659,8 @@ func verifySign(message []byte, signature types.Signature, publicKey crypto.Publ
 
 	// Secp256P1 curve
 	case secp256k1.PubKey:
+		fmt.Println("secp256k1 pubkey");
+
 		if sigPrefix != tezosprotocol.PrefixSecp256k1Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
 			return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
 		}
@@ -662,6 +670,7 @@ func verifySign(message []byte, signature types.Signature, publicKey crypto.Publ
 		return errors.Errorf("unsupported public key type: %T", publicKey)
 	}
 	if !ok {
+		fmt.Println("not ok");
 		return errors.Errorf("invalid signature %s for public key %v", signature, publicKey)
 	}
 	return nil

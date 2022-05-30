@@ -42,10 +42,14 @@ func (api *API) AuthRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("Request added");
+
 	response.Json(w, resp)
 }
 
 func (api *API) Auth(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Request auth");
+
 	net, networkContext, err := GetNetworkContext(r)
 	if err != nil {
 		response.JsonError(w, err)
@@ -69,6 +73,8 @@ func (api *API) Auth(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := service.Auth(req)
 	if err != nil {
+		fmt.Println("Error param");
+
 		response.JsonError(w, err)
 		return
 	}

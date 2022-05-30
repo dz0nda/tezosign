@@ -19,7 +19,7 @@ func Init(cfg interface{}, filename *string) error {
 	if _, err := os.Stat(*filename); os.IsNotExist(err) {
 		//expected file with config not exists
 		//check special /.secrets directory (DevOps special)
-		developmentConfigPath := "/.secrets/config.json"
+		developmentConfigPath := "./.secrets/config.json"
 		if _, err := os.Stat(developmentConfigPath); os.IsNotExist(err) {
 			return err
 		}
