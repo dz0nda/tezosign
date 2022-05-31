@@ -91,6 +91,7 @@ func (api *API) initialize(handlerArr ...negroni.Handler) {
 		AllowCredentials: true,
 		AllowedMethods:   []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
 		AllowedHeaders:   []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "User-Env"},
+		Debug: false,
 	}))
 
 	//Static file
