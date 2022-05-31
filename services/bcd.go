@@ -14,8 +14,8 @@ const betterCallDevAccountAPI = "https://api.better-call.dev/v1/account/%s/%s/to
 
 var bcdNetworks = map[models.Network]string{
 	models.NetworkMain:     "mainnet",
-	models.NetworkEdo:      "edo2net",
-	models.NetworkFlorence: "florencenet",
+	models.NetworkIthaca:	"ithacanet",
+	models.NetworkJakarta: 	"jakartanet",
 }
 
 func getAccountTokensBalance(account types.Address, network models.Network) (balances models.AssetBalances, err error) {
