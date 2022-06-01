@@ -632,34 +632,34 @@ func verifySign(message []byte, signature types.Signature, publicKey crypto.Publ
 	}
 	var ok bool
 	switch key := publicKey.(type) {
-	case ed25519.PublicKey:
-		if sigPrefix != tezosprotocol.PrefixEd25519Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
-			return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
-		}
-		ok = ed25519.Verify(key, payloadHash[:], sigBytes)
-	//P256 curve
-	case ecdsa.PublicKey:
-		if sigPrefix != tezosprotocol.PrefixP256Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
-			fmt.Println(sigPrefix.PrefixBytes())
-			return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
-		}
+		case ed25519.PublicKey:
+			if sigPrefix != tezosprotocol.PrefixEd25519Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
+				return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
+			}
+			ok = ed25519.Verify(key, payloadHash[:], sigBytes)
+		//P256 curve
+		case ecdsa.PublicKey:
+			if sigPrefix != tezosprotocol.PrefixP256Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
+				fmt.Println(sigPrefix.PrefixBytes())
+				return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
+			}
 
-		sig, err := deserializeSig(sigBytes)
-		if err != nil {
-			return err
-		}
+			sig, err := deserializeSig(sigBytes)
+			if err != nil {
+				return err
+			}
 
-		ok = ecdsa.Verify(&key, payloadHash[:], sig.R, sig.S)
+			ok = ecdsa.Verify(&key, payloadHash[:], sig.R, sig.S)
 
-	// Secp256P1 curve
-	case secp256k1.PubKey:
-		if sigPrefix != tezosprotocol.PrefixSecp256k1Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
-			return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
-		}
+		// Secp256P1 curve
+		case secp256k1.PubKey:
+			if sigPrefix != tezosprotocol.PrefixSecp256k1Signature && sigPrefix != tezosprotocol.PrefixGenericSignature {
+				return errors.Errorf("signature type %s does not match public key type %T", sigPrefix, publicKey)
+			}
 
-		ok = key.VerifySignature(payloadHash[:], sigBytes)
-	default:
-		return errors.Errorf("unsupported public key type: %T", publicKey)
+			ok = key.VerifySignature(payloadHash[:], sigBytes)
+		default:
+			return errors.Errorf("unsupported public key type: %T", publicKey)
 	}
 	if !ok {
 		fmt.Println("not ok");
