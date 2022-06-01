@@ -16,7 +16,8 @@ import (
 	"time"
 	// "crypto/rand"
 
-	"github.com/dgrijalva/jwt-go"
+	// "github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/securecookie"
 	uuid "github.com/satori/go.uuid"
 )
@@ -118,18 +119,17 @@ func (a *Auth) generateAccessToken(pubkey types.PubKey) (accessToken string, err
 	}
 
 	// create the jwt token
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.MapClaims{
+	// TODO: replace SigningMethodES384 by  SigningMethodES256
+	token := jwt.NewWithClaims(jwt.SigningMethodES384, jwt.MapClaims{
 		UserPubKeyHeader: pubkey.String(),
 		networkHeader:    a.network,
 		"exp":            time.Now().Add(time.Second * conf.TtlJWT).Unix(),
 	})
 
 	accessToken, err = token.SignedString(a.privateKey)
-	// if err != nil {
-	// 	fmt.Println("err SignedString")
-
-	// 	return "", err
-	// }
+	if err != nil {
+		return "", err
+	}
 
 	return accessToken, nil
 }
