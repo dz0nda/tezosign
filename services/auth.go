@@ -76,22 +76,22 @@ func (s *ServiceFacade) Auth(req models.AuthSignature) (resp AuthResponce, err e
 		return resp, apperrors.New(apperrors.ErrBadParam, "auth token already expired")
 	}
 
-	// payload, err := req.Payload.MarshalBinary()
-	// if err != nil {
-	// 	return resp, err
-	// }
+	payload, err := req.Payload.MarshalBinary()
+	if err != nil {
+		return resp, err
+	}
 
-	// cryptoPubKey, err := authToken.PubKey.CryptoPublicKey()
-	// if err != nil {
-	// 	return resp, err
-	// }
+	cryptoPubKey, err := authToken.PubKey.CryptoPublicKey()
+	if err != nil {
+		return resp, err
+	}
 
 	//Validate signature
-	// err = verifySign(payload, req.Signature, cryptoPubKey)
-	// if err != nil {
-	// 	fmt.Println("error signature")
-	// 	return resp, apperrors.New(apperrors.ErrBadParam, "signature")
-	// }
+	err = verifySign(payload, req.Signature, cryptoPubKey)
+	if err != nil {
+		fmt.Println("error signature")
+		return resp, apperrors.New(apperrors.ErrBadParam, "signature")
+	}
 
 	//Generate jwt
 	accessToken, refreshToken, encodedCookie, err := s.generateAuthData(authToken.PubKey)
