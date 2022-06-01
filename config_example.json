@@ -4,7 +4,7 @@
     "ListenOnPort":9090,
     "IsProtocolHttps": true,
     "CORSAllowedOrigins":[
-      "*"
+      "http://localhost", "http://localhost:3000"
     ]
   },
   "Cron": {
@@ -13,23 +13,23 @@
   },
   "Networks":[
     {
-      "Name": "main",
+      "Name": "ithaca",
       "SqlConnectionString":"",
       "Params": {
         "Host": "127.0.0.1",
         "Port": 5432,
-        "User": "user",
-        "Password": "password",
-        "Database": "tezosign_db",
+        "User": "tzsign",
+        "Password": "qwerty",
+        "Database": "tzsign_db",
         "Schema": "msig",
         "DebugMode": false
       },
       "IndexerParams": {
         "Host": "127.0.0.1",
         "Port": 5432,
-        "User": "user",
-        "Password": "password",
-        "Database": "mainnet_tzkt_db",
+        "User": "tzkt",
+        "Password": "qwerty",
+        "Database": "tzkt_db",
         "Schema": "public",
         "DebugMode": false
       },
@@ -39,7 +39,7 @@
         "SessionBlockKey": "6dbfcba83559c9f7133a8d899ed6571c00779856d95bea92fb764d2ecc0ecfe9"
       },
       "NodeRpc": {
-        "Host": "mainnet-tezos.giganode.io:443",
+        "Host": "ithacanet.tezos.marigold.dev",
         "Schemes": ["https"],
         "BasePath": ""
       }

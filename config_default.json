@@ -18,17 +18,17 @@
       "Params": {
         "Host": "127.0.0.1",
         "Port": 5432,
-        "User": "user",
-        "Password": "password",
-        "Database": "tezosign_db",
+        "User": "tzsign",
+        "Password": "qwerty",
+        "Database": "tzsign_db",
         "Schema": "msig",
         "DebugMode": false
       },
       "IndexerParams": {
         "Host": "127.0.0.1",
-        "Port": 5432,
-        "User": "user",
-        "Password": "password",
+        "Port": 5433,
+        "User": "tzkt",
+        "Password": "qwerty",
         "Database": "tzkt_db",
         "Schema": "public",
         "DebugMode": false
