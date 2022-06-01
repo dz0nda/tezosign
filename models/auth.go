@@ -5,6 +5,7 @@ import (
 	"strings"
 	"tezosign/types"
 	"time"
+	"encoding/hex"
 )
 
 type TokenType string
@@ -83,7 +84,11 @@ func (t AuthTokenPayload) Validate() (err error) {
 
 //Convert UTF8 to bytes
 func (t AuthTokenPayload) MarshalBinary() ([]byte, error) {
-	return []byte(string(t)), nil
+	bytes := hex.EncodeToString([]byte(hex.EncodeToString([]byte(string(t)))))
+	rawPayload := "0501" + hex.EncodeToString([]byte(fmt.Sprint(len(bytes)))) + bytes
+
+	return hex.DecodeString(rawPayload)
+	// return []byte(string(t)), nil
 }
 
 func (s AuthSignature) Validate() (err error) {
