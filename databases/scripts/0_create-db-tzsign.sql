@@ -1,10 +1,10 @@
-DROP DATABASE IF EXISTS tzsign_db;
+-- DROP DATABASE IF EXISTS tzsign_db;
 
-CREATE USER tzsign PASSWORD 'qwerty';
+-- CREATE USER tzsign PASSWORD 'qwerty';
 
-CREATE DATABASE tzsign_db;
+-- CREATE DATABASE tzsign_db;
 
-GRANT ALL PRIVILEGES ON DATABASE tzsign_db TO tzsign;
+-- GRANT ALL PRIVILEGES ON DATABASE tzsign_db TO tzsign;
 
 \c tzsign_db tzsign;
 
