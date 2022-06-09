@@ -1,0 +1,91 @@
+version: "3.1"
+
+services:
+  api-server:
+    build: .
+    ports:
+      - 9090:9090
+    restart: on-failure
+    depends_on:
+      - api-db
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  api-documentation:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    ports:
+      - 9080:9080
+
+  api-db:
+    image: postgres:13
+    restart: always
+    volumes:
+      - ./databases/scripts:/docker-entrypoint-initdb.d
+      - postgres-tzsign:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${TZSIGN_POSTGRES_USER:-tzsign}
+      POSTGRES_PASSWORD: ${TZSIGN_POSTGRES_PASSWORD:-qwerty}
+      POSTGRES_DB: ${TZSIGN_POSTGRES_DB:-tzsign_db}
+    ports:
+      - 127.0.0.1:5432:5432
+
+  api-pgadmin:
+    # container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    volumes:
+       - pgadmin-tzsign:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${TZSIGN_PGADMIN_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${TZSIGN_PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+
+  ithaca-db:
+    container_name: ithaca-db
+    restart: always
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${TZKT_POSTGRES_USER:-tzkt}
+      POSTGRES_PASSWORD: ${TZKT_POSTGRES_PASSWORD:-qwerty}
+      POSTGRES_DB: ${TZKT_POSTGRES_DB:-tzkt_db}
+    volumes:
+      - postgres-tzkt:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:5433:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${TZKT_POSTGRES_DB:-tzkt_db} -U ${TZKT_POSTGRES_USER:-tzkt}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ithaca-api:
+    container_name: ithaca-api
+    restart: always
+    image: bakingbad/tzkt-api:latest
+    depends_on:
+      - ithaca-db
+    environment:
+      ConnectionStrings__DefaultConnection: host=ithaca-db;port=5432;database=${TZKT_POSTGRES_DB:-tzkt_db};username=${TZKT_POSTGRES_USER:-tzkt};password=${TZKT_POSTGRES_PASSWORD:-qwerty};
+      Kestrel__Endpoints__Http__Url: http://0.0.0.0:5000
+    ports:
+      - 0.0.0.0:5010:5000
+
+  ithaca-sync:
+    container_name: ithaca-sync
+    restart: always
+    image: bakingbad/tzkt-sync:latest
+    environment:
+      ConnectionStrings__DefaultConnection: host=ithaca-db;port=5432;database=${TZKT_POSTGRES_DB:-tzkt_db};username=${TZKT_POSTGRES_USER:-tzkt};password=${TZKT_POSTGRES_PASSWORD:-qwerty};
+      TezosNode__Endpoint: https://rpc.tzkt.io/ithacanet/
+    depends_on:
+      - ithaca-db
+
+volumes:
+  postgres-tzsign:
+  pgadmin-tzsign:
+  postgres-tzkt:
