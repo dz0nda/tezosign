@@ -18,6 +18,11 @@ dev-init:
 	docker compose -f docker-compose.dev.yml exec -T ithaca-db apt autoremove --purge -y wget
 	docker compose -f docker-compose.dev.yml pull
 
+dev-db-start:
+	docker compose -f docker-compose.dev.yml up -d api-db
+	docker compose -f docker-compose.dev.yml up -d api-pgadmin
+	docker compose -f docker-compose.dev.yml up   -d ithaca-db
+
 dev-start:
 	docker compose -f docker-compose.dev.yml up -d
 
