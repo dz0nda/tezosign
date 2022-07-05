@@ -45,8 +45,8 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
 
-  ithaca-db:
-    container_name: ithaca-db
+  ghost-db:
+    container_name: ghost-db
     restart: always
     image: postgres:13
     environment:
@@ -63,27 +63,27 @@ services:
       timeout: 5s
       retries: 5
 
-  ithaca-api:
-    container_name: ithaca-api
+  ghost-api:
+    container_name: ghost-api
     restart: always
     image: bakingbad/tzkt-api:latest
     depends_on:
-      - ithaca-db
+      - ghost-db
     environment:
-      ConnectionStrings__DefaultConnection: host=ithaca-db;port=5432;database=${TZKT_POSTGRES_DB:-tzkt_db};username=${TZKT_POSTGRES_USER:-tzkt};password=${TZKT_POSTGRES_PASSWORD:-qwerty};
+      ConnectionStrings__DefaultConnection: host=ghost-db;port=5432;database=${TZKT_POSTGRES_DB:-tzkt_db};username=${TZKT_POSTGRES_USER:-tzkt};password=${TZKT_POSTGRES_PASSWORD:-qwerty};
       Kestrel__Endpoints__Http__Url: http://0.0.0.0:5000
     ports:
       - 0.0.0.0:5010:5000
 
-  ithaca-sync:
-    container_name: ithaca-sync
+  ghost-sync:
+    container_name: ghost-sync
     restart: always
     image: bakingbad/tzkt-sync:latest
     environment:
-      ConnectionStrings__DefaultConnection: host=ithaca-db;port=5432;database=${TZKT_POSTGRES_DB:-tzkt_db};username=${TZKT_POSTGRES_USER:-tzkt};password=${TZKT_POSTGRES_PASSWORD:-qwerty};
-      TezosNode__Endpoint: https://rpc.tzkt.io/ithacanet/
+      ConnectionStrings__DefaultConnection: host=ghost-db;port=5432;database=${TZKT_POSTGRES_DB:-tzkt_db};username=${TZKT_POSTGRES_USER:-tzkt};password=${TZKT_POSTGRES_PASSWORD:-qwerty};
+      TezosNode__Endpoint: https://rpc.tzkt.io/ghostnet/
     depends_on:
-      - ithaca-db
+      - ghost-db
 
 volumes:
   postgres-tzsign:
