@@ -6,7 +6,7 @@ dev-init:
 	docker compose -f docker-compose.dev.yml up -d api-db
 	docker compose -f docker-compose.dev.yml up -d api-pgadmin
 	docker compose -f docker-compose.dev.yml up   -d ithaca-db
-	@sleep 2
+	@sleep 5
 	docker compose -f docker-compose.dev.yml exec -T ithaca-db psql -U tzkt -d tzkt_db -c '\l'
 	docker compose -f docker-compose.dev.yml exec -T ithaca-db dropdb -U tzkt --if-exists tzkt_db
 	docker compose -f docker-compose.dev.yml exec -T ithaca-db createdb -U tzkt -T template0 tzkt_db
