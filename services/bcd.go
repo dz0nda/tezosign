@@ -16,6 +16,7 @@ var bcdNetworks = map[models.Network]string{
 	models.NetworkMain:     "mainnet",
 	models.NetworkIthaca:	"ithacanet",
 	models.NetworkJakarta: 	"jakartanet",
+	models.NetworkGhost:	"ghostnet",
 }
 
 func getAccountTokensBalance(account types.Address, network models.Network) (balances models.AssetBalances, err error) {

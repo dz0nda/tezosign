@@ -20,6 +20,8 @@ func ToNetwork(net string) (models.Network, error) {
 		return models.NetworkIthaca, nil
 	case "jakarta", "jakartanet":
 		return models.NetworkJakarta, nil
+		case "ghost", "ghostnet":
+			return models.NetworkGhost, nil
 	}
 
 	return "", fmt.Errorf("not supported network")
