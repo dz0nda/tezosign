@@ -13,7 +13,7 @@
   },
   "Networks":[
     {
-      "Name": "ithaca",
+      "Name": "ghost",
       "SqlConnectionString":"",
       "Params": {
         "Host": "127.0.0.1",
