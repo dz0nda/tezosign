@@ -4,7 +4,7 @@
     "ListenOnPort":9090,
     "IsProtocolHttps": true,
     "CORSAllowedOrigins":[
-      "http://localhost", "http://localhost:3000"
+      "https://www.tzsign.xyz", "www.tzsign.xyz", "tzsign.xyz"
     ]
   },
   "Cron": {
