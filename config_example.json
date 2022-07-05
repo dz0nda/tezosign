@@ -4,7 +4,7 @@
     "ListenOnPort":9090,
     "IsProtocolHttps": true,
     "CORSAllowedOrigins":[
-      "http://localhost", "http://localhost:3000"
+      "https://www.tzsign.xyz", "www.tzsign.xyz", "tzsign.xyz"
     ]
   },
   "Cron": {
@@ -39,7 +39,7 @@
         "SessionBlockKey": "6dbfcba83559c9f7133a8d899ed6571c00779856d95bea92fb764d2ecc0ecfe9"
       },
       "NodeRpc": {
-        "Host": "ithacanet.tezos.marigold.dev",
+        "Host": "rpc.tzkt.io/ghostnet",
         "Schemes": ["https"],
         "BasePath": ""
       }
